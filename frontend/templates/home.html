@@ -2,12 +2,17 @@
 <html>
 <head>
     <title>CanLII UI</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
+
+    <button class="dark-mode-toggle" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+
     <h1>Welcome to the CanLII UI</h1>
 
     <form method="post">
-        {% csrf_token %}  {# Important for security #}
+        {% csrf_token %}
         <div>
             <label for="keyword">Keyword:</label>
             <input type="text" name="keyword" id="keyword" placeholder="Enter keywords">
@@ -15,19 +20,25 @@
         <div>
             <label for="jurisdiction">Jurisdiction:</label>
             <select name="jurisdiction" id="jurisdiction">
-                <option value="">Select Jurisdiction</option> {# Add options dynamically later #}
+                <option value="">Select Jurisdiction</option>
+                {% for jurisdiction in jurisdictions %}
+                    <option value="{{ jurisdiction.databaseId }}">{{ jurisdiction.name }}</option>
+                {% endfor %}
             </select>
         </div>
         <div>
             <label for="database">Database:</label>
             <select name="database" id="database">
-                <option value="">Select Database</option> {# Add options dynamically later #}
+                <option value="">Select Database</option>
+                {% for database in databases %}
+                    <option value="{{ database.databaseId }}">{{ database.name }}</option>
+                {% endfor %}
             </select>
         </div>
         <button type="submit">Search</button>
     </form>
 
-    {% if results %} {# Display results if available #}
+    {% if results %}
         <h2>Search Results</h2>
         <ul>
             {% for result in results %}
@@ -38,7 +49,30 @@
                 </li>
             {% endfor %}
         </ul>
+    {% elif results is not None %}
+        <p>No results found.</p>
     {% endif %}
+
+    <script>
+        function toggleDarkMode() {
+            const body = document.body;
+            body.classList.toggle('dark-mode');
+
+            // Save the preference using cookies
+            if (body.classList.contains('dark-mode')) {
+                document.cookie = "darkMode=enabled; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/";
+            } else {
+                document.cookie = "darkMode=disabled; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+            }
+        }
+
+        // Check for dark mode preference on page load
+        window.onload = function() {
+            if (document.cookie.indexOf("darkMode=enabled") > -1) {
+                document.body.classList.add('dark-mode');
+            }
+        }
+    </script>
 
 </body>
 </html>
