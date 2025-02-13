@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CanLII UI</title>
+</head>
+<body>
+    <h1>Welcome to the CanLII UI</h1>
+
+    <form method="post">
+        {% csrf_token %}  {# Important for security #}
+        <div>
+            <label for="keyword">Keyword:</label>
+            <input type="text" name="keyword" id="keyword" placeholder="Enter keywords">
+        </div>
+        <div>
+            <label for="jurisdiction">Jurisdiction:</label>
+            <select name="jurisdiction" id="jurisdiction">
+                <option value="">Select Jurisdiction</option> {# Add options dynamically later #}
+            </select>
+        </div>
+        <div>
+            <label for="database">Database:</label>
+            <select name="database" id="database">
+                <option value="">Select Database</option> {# Add options dynamically later #}
+            </select>
+        </div>
+        <button type="submit">Search</button>
+    </form>
+
+    {% if results %} {# Display results if available #}
+        <h2>Search Results</h2>
+        <ul>
+            {% for result in results %}
+                <li>
+                    <h3><a href="{{ result.url }}">{{ result.title }}</a></h3>
+                    <p>{{ result.citation }}</p>
+                    <p>Database: {{ result.databaseId }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+</body>
+</html>

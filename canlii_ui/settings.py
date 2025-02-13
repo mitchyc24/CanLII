@@ -11,6 +11,13 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import environ
+
+# Load environment variables from .env file
+env = environ.Env()
+environ.Env.read_env()
+
+CANLII_API_KEY = env('CANLII_API_KEY')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-f&$t!h%#@w8u)yjs7x%gmp55j9enynul#i&!7j3l1malwrnqav'
+SECRET_KEY = r'django-insecure-f&$t!h%#@w8u)yjs7x%gmp55j9enynul#i&!7j3l1malwrnqav'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
